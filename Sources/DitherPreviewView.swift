@@ -89,7 +89,7 @@ final class DitherPreviewView: NSView {
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
-        renderer?.resetClock()
+        renderer?.resetAnimationTiming()
     }
 
     private func renderFrame(advance: Bool) {
@@ -111,7 +111,7 @@ final class DitherPreviewView: NSView {
             }
             try renderer.render(to: drawable, size: bounds.size, configuration: previewConfiguration, advance: advance)
         } catch {
-            NSLog("GeometryClock: preview render failed: %@", String(describing: error))
+            NSLog("Dither: preview render failed: %@", String(describing: error))
         }
     }
 }

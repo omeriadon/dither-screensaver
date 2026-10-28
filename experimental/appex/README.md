@@ -1,7 +1,7 @@
-# Geometry Clock app-extension experiment
+# Dither app-extension experiment
 
 This is an experimental macOS screensaver app extension. It reuses the public
-Metal Dither renderer and `BauhausClockView` entry point from the repository, but the
+Metal Dither renderer and `DitherScreenSaverView` entry point from the repository, but the
 extension entry points and manifest target Apple's private, undocumented
 `com.apple.screensaver` extension point.
 
@@ -18,7 +18,7 @@ From the repository root:
 experimental/appex/build.sh
 ```
 
-The output is `experimental/appex/build/GeometryClockHost.app`. The script
+The output is `experimental/appex/build/DitherHost.app`. The script
 only builds and ad-hoc signs it. It does not register, install, or change
 system settings.
 
@@ -27,8 +27,8 @@ register a development build again, register its containing app first and then
 its extension:
 
 ```sh
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$PWD/experimental/appex/build/GeometryClockHost.app"
-pluginkit -a "$PWD/experimental/appex/build/GeometryClockHost.app/Contents/PlugIns/GeometryClockExtension.appex"
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$PWD/experimental/appex/build/DitherHost.app"
+pluginkit -a "$PWD/experimental/appex/build/DitherHost.app/Contents/PlugIns/DitherExtension.appex"
 ```
 
 The extension executable and manifests compile and pass code-signature
@@ -41,7 +41,7 @@ experimental/appex/check-registration.sh
 ```
 
 The script refuses to run if the extension identifier is already registered.
-On this Mac running macOS 27.2, System Settings showed the clock in its live
+On this Mac running macOS 27.2, System Settings showed Dither in its live
 preview, and WallpaperAgent loaded the extension for two displays during a
 brief full-screen activation. The initially running WallpaperAgent did not know
 the newly registered module and fell back to the default saver; restarting it
@@ -64,8 +64,8 @@ domain:
 
 ```sh
 swiftc Sources/DitherConfiguration.swift experimental/appex/Settings.swift experimental/appex/SettingsCheck.swift \
-    -framework ScreenSaver -o /tmp/GeometryClockSettingsCheck
-/tmp/GeometryClockSettingsCheck
+    -framework ScreenSaver -o /tmp/DitherSettingsCheck
+/tmp/DitherSettingsCheck
 ```
 
 ## Signing and distribution

@@ -2,9 +2,9 @@ import AppKit
 import ScreenSaver
 import SwiftUI
 
-@objc(GeometryClockConfigurationViewController)
-final class GeometryClockConfigurationViewController: ScreenSaverConfigurationViewController {
-    private let settings = GeometryClockSettings.shared
+@objc(DitherConfigurationViewController)
+final class DitherConfigurationViewController: ScreenSaverConfigurationViewController {
+    private let settings = DitherSettings.shared
     private let optionsModel = DitherOptionsModel()
     private lazy var optionsView = NSHostingView(rootView: DitherOptionsView(model: optionsModel))
 

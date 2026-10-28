@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${0:A:h}"
 BUILD_DIR="$ROOT/build"
-BUNDLE="$BUILD_DIR/GeometryClock.saver"
+BUNDLE="$BUILD_DIR/Dither.saver"
 export MACOSX_DEPLOYMENT_TARGET=13.0
 
 rm -rf "$BUILD_DIR"
@@ -14,20 +14,19 @@ swiftc \
     -emit-object \
     -whole-module-optimization \
     -target "$(uname -m)-apple-macos13.0" \
-    -module-name BauhausClock \
+    -module-name Dither \
     "$ROOT/Sources/DitherConfiguration.swift" \
     "$ROOT/Sources/AnimationTiming.swift" \
-    "$ROOT/Sources/ClockMath.swift" \
-    "$ROOT/Sources/BauhausClockView.swift" \
+    "$ROOT/Sources/DitherScreenSaverView.swift" \
     "$ROOT/Sources/DitherPreviewView.swift" \
-    -o "$BUILD_DIR/Clock.o"
+    -o "$BUILD_DIR/Dither.o"
 
 SWIFT_LIB_DIR="$(dirname "$(xcrun --find swiftc)")/../lib/swift/macosx"
-clang -bundle "$BUILD_DIR/Clock.o" \
+clang -bundle "$BUILD_DIR/Dither.o" \
     -framework AppKit -framework ScreenSaver \
     -L "$SWIFT_LIB_DIR" -Wl,-rpath,/usr/lib/swift \
-    -o "$BUNDLE/Contents/MacOS/BauhausClock"
-rm "$BUILD_DIR/Clock.o"
+    -o "$BUNDLE/Contents/MacOS/Dither"
+rm "$BUILD_DIR/Dither.o"
 
 cat > "$BUNDLE/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -37,13 +36,13 @@ cat > "$BUNDLE/Contents/Info.plist" <<'PLIST'
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
-    <string>BauhausClock</string>
+    <string>Dither</string>
     <key>CFBundleIdentifier</key>
-    <string>local.geometry-clock</string>
+    <string>local.dither</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Geometry Clock</string>
+    <string>Dither</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
@@ -51,7 +50,7 @@ cat > "$BUNDLE/Contents/Info.plist" <<'PLIST'
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>NSPrincipalClass</key>
-    <string>BauhausClockView</string>
+    <string>DitherScreenSaverView</string>
 </dict>
 </plist>
 PLIST

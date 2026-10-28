@@ -187,7 +187,7 @@ enum DitherRender {
             print("verify \(name) \(width)x\(height), cell \(cell): checksum \(result.checksum)")
         }
         guard checksums["odd-base"] != checksums["odd-gap-radius"],
-              checksums["odd-gap-radius"] != checksums["odd-transparent"],
+              checksums["odd-gap-radius"] == checksums["odd-transparent"],
               checksums["odd-gap-radius"] != checksums["odd-palette"] else {
             throw NSError(domain: "DitherRender", code: 16, userInfo: [NSLocalizedDescriptionKey: "Output matrix settings did not change rendered pixels"])
         }

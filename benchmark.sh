@@ -9,7 +9,7 @@ swiftc \
     -target "$(uname -m)-apple-macos13.0" \
     "$ROOT/Sources/DitherConfiguration.swift" \
     "$ROOT/Sources/AnimationTiming.swift" \
-    "$ROOT/Sources/BauhausClockView.swift" \
+    "$ROOT/Sources/DitherScreenSaverView.swift" \
     "$ROOT/Tools/DitherRender.swift" \
     -framework AppKit \
     -framework ScreenSaver \

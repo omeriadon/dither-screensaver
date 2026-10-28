@@ -2,8 +2,9 @@
 set -euo pipefail
 
 ROOT="${0:A:h}"
-APP="$ROOT/build/GeometryClockHost.app"
-APPEX="$APP/Contents/PlugIns/GeometryClockExtension.appex"
+APP="$ROOT/build/DitherHost.app"
+APPEX="$APP/Contents/PlugIns/DitherExtension.appex"
+# Compatibility: this is the installed extension bundle identifier.
 IDENTIFIER="local.geometry-clock.appex"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 

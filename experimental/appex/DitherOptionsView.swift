@@ -70,10 +70,7 @@ final class DitherOptionsModel: ObservableObject {
         }
         textValues = loaded
         originalText = loaded
-        checks = [
-            "intro": values["intro"] as? Bool == true,
-            "transparent": values["transparent"] as? Bool == true
-        ]
+        checks = ["intro": values["intro"] as? Bool == true]
         ditherMode = values["ditherMode"] as? Int ?? 0
         backgroundStyle = values["backgroundStyle"] as? String ?? "custom"
 
@@ -157,7 +154,6 @@ final class DitherOptionsModel: ObservableObject {
             backgroundStyle = "white"
         }
         textValues["backgroundColor"] = backgroundHex
-        checks["transparent"] = false
         publishPreview()
     }
 
@@ -263,7 +259,7 @@ final class DitherOptionsModel: ObservableObject {
             vectorColor(String($0), fallback: nil)
         } ?? []
         result.intro = false
-        result.transparent = checks["transparent"] == true
+        result.transparent = false
         result.ditherMode = ditherMode
         configuration = result
         onPreviewChanged?(result)
@@ -397,8 +393,6 @@ private struct ColorSection: View {
                 backgroundButton(model, style: "white", title: "White", symbol: "circle")
                 backgroundButton(model, style: "dim", title: "Tinted", symbol: "circle.lefthalf.filled")
             }
-            Toggle("Transparent output", isOn: checkBinding(model, key: "transparent"))
-                .accessibilityIdentifier("transparent")
         }
     }
 }

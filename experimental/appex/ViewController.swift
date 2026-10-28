@@ -1,17 +1,17 @@
 import AppKit
 import ScreenSaver
 
-@objc(GeometryClockScreenSaverViewController)
-final class GeometryClockScreenSaverViewController: ScreenSaverViewController {
+@objc(DitherScreenSaverViewController)
+final class DitherScreenSaverViewController: ScreenSaverViewController {
     override func loadView() {
-        NSLog("GeometryClock: extension controller loading view")
-        guard let clock = BauhausClockView(frame: .zero, isPreview: false) else {
-            NSLog("GeometryClock: failed to create clock view")
+        NSLog("Dither: extension controller loading view")
+        guard let saver = DitherScreenSaverView(frame: .zero, isPreview: false) else {
+            NSLog("Dither: failed to create screen saver view")
             view = NSView(frame: .zero)
             return
         }
 
-        clock.autoresizingMask = [.width, .height]
-        view = clock
+        saver.autoresizingMask = [.width, .height]
+        view = saver
     }
 }

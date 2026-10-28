@@ -4,8 +4,8 @@ set -euo pipefail
 ROOT="${0:A:h}"
 PROJECT_ROOT="${ROOT:h:h}"
 BUILD_DIR="$ROOT/build"
-APP="$BUILD_DIR/GeometryClockHost.app"
-APPEX="$APP/Contents/PlugIns/GeometryClockExtension.appex"
+APP="$BUILD_DIR/DitherHost.app"
+APPEX="$APP/Contents/PlugIns/DitherExtension.appex"
 export MACOSX_DEPLOYMENT_TARGET=13.0
 
 if [[ -x "/Applications/Xcode.app/Contents/Developer/usr/bin/actool" ]]; then
@@ -26,7 +26,7 @@ swiftc \
     -target "$TARGET" \
     "$PROJECT_ROOT/Sources/DitherConfiguration.swift" \
     "$PROJECT_ROOT/Sources/AnimationTiming.swift" \
-    "$PROJECT_ROOT/Sources/BauhausClockView.swift" \
+    "$PROJECT_ROOT/Sources/DitherScreenSaverView.swift" \
     "$PROJECT_ROOT/Tools/DitherRender.swift" \
     -framework AppKit \
     -framework ScreenSaver \
@@ -60,14 +60,13 @@ swiftc \
     -parse-as-library \
     -emit-object \
     -whole-module-optimization \
-    -D GEOMETRY_CLOCK_APPEX \
+    -D DITHER_APPEX \
     -target "$TARGET" \
-    -module-name GeometryClockExtension \
+    -module-name DitherExtension \
     -import-objc-header "$ROOT/ScreenSaverPrivate.h" \
     "$PROJECT_ROOT/Sources/DitherConfiguration.swift" \
     "$PROJECT_ROOT/Sources/AnimationTiming.swift" \
-    "$PROJECT_ROOT/Sources/ClockMath.swift" \
-    "$PROJECT_ROOT/Sources/BauhausClockView.swift" \
+    "$PROJECT_ROOT/Sources/DitherScreenSaverView.swift" \
     "$PROJECT_ROOT/Sources/DitherPreviewView.swift" \
     "$ROOT/Extension.swift" \
     "$ROOT/ViewController.swift" \
@@ -85,14 +84,14 @@ clang -Wl,-e,_NSExtensionMain \
     -framework ScreenSaver \
     -L "$SWIFT_LIB_DIR" \
     -Wl,-rpath,/usr/lib/swift \
-    -o "$APPEX/Contents/MacOS/GeometryClockExtension"
+    -o "$APPEX/Contents/MacOS/DitherExtension"
 
 swiftc \
     -parse-as-library \
     -target "$TARGET" \
     "$ROOT/HostMain.swift" \
     -framework AppKit \
-    -o "$APP/Contents/MacOS/GeometryClockHost"
+    -o "$APP/Contents/MacOS/DitherHost"
 
 cp "$ROOT/Extension-Info.plist" "$APPEX/Contents/Info.plist"
 cp "$ROOT/Host-Info.plist" "$APP/Contents/Info.plist"

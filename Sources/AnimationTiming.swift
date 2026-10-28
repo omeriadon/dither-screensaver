@@ -1,6 +1,6 @@
 import Foundation
 
-struct DitherAnimationClock {
+struct DitherAnimationTiming {
     private var lastTime: TimeInterval?
 
     mutating func advance(now: TimeInterval, isAdvancing: Bool) -> TimeInterval {

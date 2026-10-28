@@ -3,13 +3,15 @@ import Foundation
 @main
 enum SettingsCheck {
     static func main() {
-        let suiteName = "local.geometry-clock.settings-check.\(UUID().uuidString)"
+        let suiteName = "local.dither.settings-check.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
-        let settings = GeometryClockSettings(defaults: defaults)
+        let settings = DitherSettings(defaults: defaults)
 
         assert(settings.configuration.pixelSize == 2)
         assert(settings.configuration.gap == 0)
         assert(settings.configuration.cornerRadius == 0)
+        defaults.set(true, forKey: "transparent")
+        assert(!settings.configuration.transparent)
         assert(String(describing: settings.value(for: "waveSpeed")) == "0.05")
         settings.set(6, for: "ditherMode")
         assert(settings.configuration.ditherMode == 6)

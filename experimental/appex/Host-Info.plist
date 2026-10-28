@@ -5,9 +5,9 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
-    <string>GeometryClockHost</string>
+    <string>DitherHost</string>
     <key>CFBundleIdentifier</key>
-    <string>local.geometry-clock.host</string>
+    <string>local.dither.host</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>

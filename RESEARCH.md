@@ -2,10 +2,6 @@
 
 Research date: 27 October 2026. This is a source review, not a claim that the specific failures on this Mac have been reproduced. Local static artifact inspection is recorded below; runtime verification remains separate work.
 
-## Bauhaus Clock
-
-Bauhaus Clock is a commercial analog clock screen saver. Its maker describes multiple dial colors, subtle dial details, and a pixel-shift feature added in version 1.1. Its own troubleshooting page says that on macOS Tahoe the Options button may fail to open, and advises quitting and reopening System Settings. That is the maker's diagnosis and workaround, not proof that every unresponsive Options button has the same cause. A limited static inventory of the installed binary appears below; source was not examined. [Bauhaus Clock](https://bauhausclock.com/)
-
 ## Apple's documented contract
 
 Apple documents `.saver` bundles containing a `ScreenSaverView` subclass, installed in a Library/Screen Savers directory. The bundle's machine architecture must match its host; Apple recommends both arm64 and x86_64 for full compatibility. Apple describes initial drawing followed by animation startup, repeated frame callbacks, and eventual animation stop. [Screen Saver framework](https://developer.apple.com/documentation/screensaver)
@@ -42,15 +38,9 @@ The same report warns duplicate registered extension copies can cause an unexpec
 
 ## Unresolved
 
-The installed Bauhaus build received a limited static inventory; its settings implementation and failure mode remain unverified. No claim is made that every Apple screen saver shares an architecture, that any private API is stable, that an Options workaround cures black frames, or that a particular release fixes the reported host bugs. Local binary inspection, visual evaluation, and controlled real-host tests are necessary to establish those facts.
-
 ## Local artifact inventory
 
-On this Mac, macOS 27.2 build 26B5112a, the installed `/Library/Screen Savers/Bauhaus Clock 2.1.saver` identifies itself as version 2.1, bundle `com.atilla.bauhausclock`, with principal class `Bauhaus_Clock_ScreensaverView`. Its binary is signed and includes arm64 and x86_64 slices. Static strings include `configureSheet`, `hasConfigureSheet`, `animateOneFrame`, `startAnimation`, and `stopAnimation`. These names establish only that they occur in the binary; they do not establish call paths or identify the cause of a failure. SHA-256 of the universal executable: `ab72fec39b57a45923b1b97717977c7fca60ec4cf5c8c8c07c7a00e49ae4375f`.
-
 The system includes legacy `FloatingMessage.saver` and `Random.saver`, as well as separate Wallpaper Legacy, Aerials, Macintosh, Dynamic, and other extension bundles under `/System/Library/ExtensionKit/Extensions`. Their installed manifests identify `com.apple.wallpaper` as the extension point. Binary dependency inspection shows the Legacy extension links the public ScreenSaver framework and private WallpaperExtensionKit; Aerials and Macintosh also link private WallpaperExtensionKit. The Aerials extension carries private Apple entitlements. These are static observations, not evidence that all built-in savers follow one execution path or that a third-party app can use the same privileges.
-
-The native REA analysis was opened against an arm64 slice of Bauhaus. Automatic analysis of the original universal binary could not select a provider; deeper analysis of the slice timed out after 300 seconds; no REA function-level result was obtained. The separately recorded disassembly below used Apple command-line tools and is not runtime evidence. No user settings or installed bundles were changed.
 
 ## Follow-up static analysis: macOS 27.2 build 26B5112a
 
@@ -68,8 +58,6 @@ This is a version-specific inventory, not a complete decompilation or a live tra
 | `WallpaperDynamicExtension.appex`, `WallpaperGradientExtension.appex`, `WallpaperImageExtension.appex`, `WallpaperSequoiaExtension.appex` | `com.apple.wallpaper`; link `WallpaperExtensionKit` and `WallpaperFoundation` | Additional extensions whose internal rendering and runtime behavior remain untraced. |
 
 `NeptuneOneWallpaper.appex` was present, but its plist could not be parsed by Python's `plistlib`; its architecture is not characterized here. `Wallpaper.appex` declares the Settings UI extension point; `WallpaperSettingsIntents.appex` is another related component. These inventories do not cover every screen saver asset, OS version, or host process.
-
-For Bauhaus Clock 2.1's arm64 slice, Objective-C method metadata identifies `-[Bauhaus_Clock_ScreensaverView configureSheet]` at `0x4394`. Disassembly of that method shows a conditional window construction path, `initWithContentRect:styleMask:backing:defer:`, and calls to `defaultsForModuleWithName:` using `com.atilla.bauhausclock`, followed by lookups for saved theme, color, dial, movement, and size and creation of a theme-selection view. It also logs `configureSheet called` and `Configure sheet created successfully`. This supports a programmatic options window with module preferences; it does not show whether macOS calls that method or displays the window when Options is clicked. The binary identifies its log subsystem as `com.atilla.bauhausclock` and category as `screensaver`; logs may help distinguish a missing host callback from failure after the callback, but no logs were examined here.
 
 ## Prototype verification
 
@@ -100,8 +88,6 @@ This changes the engineering assessment: the simple legacy prototype exercises t
 The same disassembly shows a separate `showConfigureSheet` method logging its call, obtaining `NSApplication.sharedApplication.windows.firstObject`, and sending `beginSheet:completionHandler:`. Its `closeConfigureSheet:` path commits the selection, writes the module defaults, calls `synchronize`, invokes `applySettings`, then sends `endSheet:` and `orderOut:`. Choosing the first application window is a potential fragility if this method runs in a process containing multiple windows; the static code does not establish that macOS invokes this separate method, which window is first, or that it causes the reported Options failures. The observed `endSheet:` call follows Apple's documented dismissal requirement.
 
 Codesign metadata on the installed Flurry, Drift, Hello, and Arabesque extensions includes the app sandbox plus private Apple entitlements and temporary exceptions. This confirms Apple's own signing profile has privileges a third-party developer cannot assume; it does not establish which privileges any one screen saver actually requires. The installed public SDK's ScreenSaver link stub lists `ScreenSaverExtension`, `ScreenSaverViewController`, and `ScreenSaverConfigurationViewController`, but their presence as linkable symbols alone is not a public API or compatibility guarantee.
-
-A read-only query for Bauhaus's log subsystem over the preceding 24 hours yielded no matching event entries. That absence cannot determine whether the Options callback was called: logging may not have been retained or the relevant interaction may have occurred outside the query window.
 
 `pluginkit -m -v -p com.apple.screensaver` reports 13 registrations on this Mac: the 11 dedicated Apple extensions in the table and `com.apple.ScreenSaver.Engine.legacyScreenSaver` plus its x86-64 variant, both located in `ScreenSaver.framework/PlugIns`. This is direct registry evidence that Apple's compatibility adapters and the dedicated savers share the screen saver extension point. It does not by itself trace a specific `.saver` launch through either adapter.
 

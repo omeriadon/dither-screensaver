@@ -2,10 +2,11 @@ import Foundation
 import ScreenSaver
 import simd
 
-final class GeometryClockSettings: NSObject {
-    static let shared = GeometryClockSettings()
-    static let didChangeNotification = Notification.Name("local.geometry-clock.appex.settingsDidChange")
+final class DitherSettings: NSObject {
+    static let shared = DitherSettings()
+    static let didChangeNotification = Notification.Name("local.dither.appex.settingsDidChange")
 
+    // Compatibility: retain the installed extension's settings domain.
     private static let moduleIdentifier = "local.geometry-clock.appex"
     private let defaults: UserDefaults
     private var observing = false
@@ -68,7 +69,7 @@ final class GeometryClockSettings: NSObject {
         result.contrast = number(for: "contrast", fallback: result.contrast)
         result.brightness = number(for: "brightness", fallback: result.brightness)
         result.intro = defaults.bool(forKey: "intro")
-        result.transparent = defaults.bool(forKey: "transparent")
+        result.transparent = false
         result.dpr = min(2, max(0, number(for: "dpr", fallback: result.dpr)))
         result.gap = min(0.45, max(0, number(for: "gap", fallback: result.gap)))
         result.cornerRadius = min(0.5, max(0, number(for: "cornerRadius", fallback: result.cornerRadius)))

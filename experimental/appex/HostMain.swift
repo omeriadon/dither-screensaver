@@ -1,12 +1,12 @@
 import AppKit
 
 @main
-final class GeometryClockHost: NSObject, NSApplicationDelegate, NSWindowDelegate {
+final class DitherHost: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var window: NSWindow?
 
     static func main() {
         let application = NSApplication.shared
-        let delegate = GeometryClockHost()
+        let delegate = DitherHost()
         application.delegate = delegate
         application.setActivationPolicy(.regular)
         application.run()

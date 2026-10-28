@@ -7,11 +7,14 @@ web content is used.
 
 ## Build
 
+Open `Dither.xcodeproj` in Xcode. The Dither build target runs the extension
+build script and produces `experimental/appex/build/DitherHost.app`.
+
 ```sh
 ./build.sh
 ```
 
-The result is `build/GeometryClock.saver`. The script builds for the current
+The result is `build/Dither.saver`. The script builds for the current
 architecture and ad-hoc signs locally. It does not install the saver, launch
 ScreenSaverEngine, register it, or modify system settings.
 
@@ -36,8 +39,8 @@ Settings persistence is checked without touching the real saver preference
 domain:
 
 ```sh
-swiftc Sources/DitherConfiguration.swift experimental/appex/Settings.swift experimental/appex/SettingsCheck.swift -framework ScreenSaver -o /tmp/GeometryClockSettingsCheck
-/tmp/GeometryClockSettingsCheck
+swiftc Sources/DitherConfiguration.swift experimental/appex/Settings.swift experimental/appex/SettingsCheck.swift -framework ScreenSaver -o /tmp/DitherSettingsCheck
+/tmp/DitherSettingsCheck
 ```
 
 The renderer has no pointer, hover, trail, ripple, or cursor settings.

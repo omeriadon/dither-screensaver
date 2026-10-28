@@ -49,7 +49,7 @@ final class DitherMetalRenderer {
     private var fieldSize = MTLSize(width: 1, height: 1, depth: 1)
     private var time: Float = 0
     private var reveal: Float = 0
-    private var clock = DitherAnimationClock()
+    private var animationTiming = DitherAnimationTiming()
     private var paletteBuffer: MTLBuffer
     private var lastPalette: [SIMD3<Float>] = []
     private(set) var lastRenderMetrics: RenderMetrics?
@@ -116,13 +116,13 @@ final class DitherMetalRenderer {
         try render(to: target, width: width, height: height, cell: cell, configuration: configuration, advance: advance, drawable: nil, waitUntilCompleted: true)
     }
 
-    func resetClock() {
-        clock.reset()
+    func resetAnimationTiming() {
+        animationTiming.reset()
     }
 
     private func render(to target: MTLTexture, width: Int, height: Int, cell: Int, configuration: DitherConfiguration, advance: Bool, drawable: CAMetalDrawable?, waitUntilCompleted: Bool) throws {
         let cpuStart = CACurrentMediaTime()
-        let delta = Float(clock.advance(now: cpuStart, isAdvancing: advance))
+        let delta = Float(animationTiming.advance(now: cpuStart, isAdvancing: advance))
         if advance && !configuration.disableAnimation {
             time += delta
         }
@@ -147,7 +147,7 @@ final class DitherMetalRenderer {
             throw NSError(domain: "DitherMetal", code: 6, userInfo: [NSLocalizedDescriptionKey: "Could not allocate field texture"])
         }
         var field = FieldUniforms(resolution: SIMD2<Float>(Float(columns * cell), Float(rows * cell)), cell: Float(cell), time: time, waveSpeed: configuration.waveSpeed, waveFrequency: configuration.waveFrequency, waveAmplitude: configuration.waveAmplitude, scale: max(0.05, configuration.scale), contrast: configuration.contrast, brightness: configuration.brightness, intro: reveal, reach: 1.5)
-        var dither = DitherUniforms(fieldSize: SIMD2<Int32>(Int32(columns), Int32(rows)), cellDevice: Float(cell), mode: Int32(configuration.ditherMode), colorNum: max(2, configuration.colorNum), wave: configuration.waveColor, background: configuration.backgroundColor, paletteCount: Int32(min(8, configuration.palette.count)), transparent: configuration.transparent ? 1 : 0, gap: min(0.45, max(0, configuration.gap)), cornerRadius: min(0.5, max(0, configuration.cornerRadius)), viewportSize: SIMD2<Int32>(Int32(width), Int32(height)))
+        var dither = DitherUniforms(fieldSize: SIMD2<Int32>(Int32(columns), Int32(rows)), cellDevice: Float(cell), mode: Int32(configuration.ditherMode), colorNum: max(2, configuration.colorNum), wave: configuration.waveColor, background: configuration.backgroundColor, paletteCount: Int32(min(8, configuration.palette.count)), transparent: 0, gap: min(0.45, max(0, configuration.gap)), cornerRadius: min(0.5, max(0, configuration.cornerRadius)), viewportSize: SIMD2<Int32>(Int32(width), Int32(height)))
         if configuration.palette != lastPalette {
             var paletteData = [SIMD3<Float>](repeating: SIMD3<Float>(), count: 8)
             for (index, color) in configuration.palette.prefix(8).enumerated() {
@@ -472,12 +472,12 @@ fragment float4 ditherUpscale(
 """
 }
 
-@objc(BauhausClockView)
-public final class BauhausClockView: ScreenSaverView {
+@objc(DitherScreenSaverView)
+public final class DitherScreenSaverView: ScreenSaverView {
     private var renderer: DitherMetalRenderer?
     private var configuration = DitherConfiguration()
-#if GEOMETRY_CLOCK_APPEX
-    private let settings = GeometryClockSettings.shared
+#if DITHER_APPEX
+    private let settings = DitherSettings.shared
 #endif
 
     public override init?(frame: NSRect, isPreview: Bool) {
@@ -492,15 +492,15 @@ public final class BauhausClockView: ScreenSaverView {
             renderer = try DitherMetalRenderer()
             metalLayer.device = renderer?.device
         } catch {
-            NSLog("GeometryClock: Metal renderer unavailable: %@", String(describing: error))
+            NSLog("Dither: Metal renderer unavailable: %@", String(describing: error))
             metalLayer.backgroundColor = NSColor.black.cgColor
         }
-#if GEOMETRY_CLOCK_APPEX
+#if DITHER_APPEX
         configuration = settings.configuration
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(settingsDidChange),
-            name: GeometryClockSettings.didChangeNotification,
+            name: DitherSettings.didChangeNotification,
             object: nil
         )
 #endif
@@ -512,7 +512,7 @@ public final class BauhausClockView: ScreenSaverView {
 
     public override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        renderer?.resetClock()
+        renderer?.resetAnimationTiming()
         guard window != nil else {
             return
         }
@@ -520,13 +520,13 @@ public final class BauhausClockView: ScreenSaverView {
     }
 
     public override func startAnimation() {
-        renderer?.resetClock()
+        renderer?.resetAnimationTiming()
         super.startAnimation()
     }
 
     public override func stopAnimation() {
         super.stopAnimation()
-        renderer?.resetClock()
+        renderer?.resetAnimationTiming()
     }
 
     public override func setFrameSize(_ newSize: NSSize) {
@@ -542,7 +542,7 @@ public final class BauhausClockView: ScreenSaverView {
     }
 
     @objc private func settingsDidChange() {
-#if GEOMETRY_CLOCK_APPEX
+#if DITHER_APPEX
         settings.reload()
         configuration = settings.configuration
 #endif
@@ -550,7 +550,7 @@ public final class BauhausClockView: ScreenSaverView {
     }
 
     private func currentConfiguration() -> DitherConfiguration {
-#if GEOMETRY_CLOCK_APPEX
+#if DITHER_APPEX
         return configuration
 #else
         return configuration
@@ -574,7 +574,7 @@ public final class BauhausClockView: ScreenSaverView {
             }
             try renderer.render(to: drawable, size: bounds.size, configuration: configuration, advance: true)
         } catch {
-            NSLog("GeometryClock: frame render failed: %@", String(describing: error))
+            NSLog("Dither: frame render failed: %@", String(describing: error))
             metalLayer.backgroundColor = NSColor.black.cgColor
         }
     }
