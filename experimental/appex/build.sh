@@ -68,6 +68,7 @@ swiftc \
     "$PROJECT_ROOT/Sources/AnimationTiming.swift" \
     "$PROJECT_ROOT/Sources/DitherScreenSaverView.swift" \
     "$PROJECT_ROOT/Sources/DitherPreviewView.swift" \
+    "$PROJECT_ROOT/Sources/VariableBlurView.swift" \
     "$ROOT/Extension.swift" \
     "$ROOT/ViewController.swift" \
     "$ROOT/Settings.swift" \

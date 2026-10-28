@@ -10,6 +10,18 @@ web content is used.
 Open `Dither.xcodeproj` in Xcode. The Dither build target runs the extension
 build script and produces `experimental/appex/build/DitherHost.app`.
 
+The shared `Dither` scheme maps Command-B to that build. Command-R builds first,
+then runs `install.sh` before launching the installed Dither host app.
+The installer restarts WallpaperAgent to refresh screen saver discovery, unless
+a screen saver is active. It does not activate a screen saver.
+
+The installer stages and signature-checks the built app, backs up an existing
+`~/Applications/Dither Screen Saver.app` under
+`~/Applications/.Dither Screen Saver.backups/`, moves the staged app into place,
+verifies it again, and registers the host and extension with Launch Services and
+PlugInKit. It changes no preference domains, so existing settings remain in
+place.
+
 ```sh
 ./build.sh
 ```
@@ -23,6 +35,25 @@ The extension build is:
 ```sh
 experimental/appex/build.sh
 ```
+
+To install manually after a successful build:
+
+```sh
+./install.sh
+```
+
+For an isolated installer test, override both paths. The source must be a
+signature-valid built app, and the destination must be a disposable app path:
+
+```sh
+DITHER_SOURCE_APP="$PWD/experimental/appex/build/DitherHost.app" \
+DITHER_INSTALL_DESTINATION="$(mktemp -d)/Dither Screen Saver.app" \
+DITHER_INSTALL_BACKUP_ROOT="$(mktemp -d)/backups" \
+./install.sh
+```
+
+The installer never launches the screen saver, opens System Settings, or stops
+unrelated applications.
 
 ## Offscreen render and self-check
 

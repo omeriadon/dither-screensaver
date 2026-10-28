@@ -3,22 +3,29 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		A10000000000000000000001 /* build.sh in ShellScript */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* build.sh */; };
-/* End PBXBuildFile section */
+/* Begin PBXAggregateTarget section */
+		A10000000000000000000050 /* Dither */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A10000000000000000000060 /* Build configuration list for PBXAggregateTarget "Dither" */;
+			buildPhases = (
+				A10000000000000000000051 /* Build Dither extension */,
+			);
+			dependencies = (
+			);
+			name = Dither;
+			productName = Dither;
+		};
+/* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000010 /* Dither.xcodeproj */ = {isa = PBXFileReference; explicitFileType = wrapper.pb-project; includeInIndex = 0; path = Dither.xcodeproj; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000000000011 /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = SOURCE_ROOT; };
-		A10000000000000000000012 /* benchmark.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = benchmark.sh; sourceTree = SOURCE_ROOT; };
-		A10000000000000000000013 /* render.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = render.sh; sourceTree = SOURCE_ROOT; };
 		A10000000000000000000014 /* DitherConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherConfiguration.swift; sourceTree = "<group>"; };
 		A10000000000000000000015 /* AnimationTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationTiming.swift; sourceTree = "<group>"; };
 		A10000000000000000000016 /* DitherScreenSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherScreenSaverView.swift; sourceTree = "<group>"; };
 		A10000000000000000000017 /* DitherPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherPreviewView.swift; sourceTree = "<group>"; };
+		A10000000000000000000021 /* VariableBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableBlurView.swift; sourceTree = "<group>"; };
 		A10000000000000000000018 /* DitherRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherRender.swift; sourceTree = "<group>"; };
 		A10000000000000000000019 /* AnimationTimingCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationTimingCheck.swift; sourceTree = "<group>"; };
 		A1000000000000000000001A /* MetalLayerCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalLayerCheck.swift; sourceTree = "<group>"; };
@@ -30,44 +37,232 @@
 		A10000000000000000000020 /* HostMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostMain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworksBuildPhase section */
-		A10000000000000000000030 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXGroup section */
-		A10000000000000000000040 = {isa = PBXGroup; children = ( A10000000000000000000041, A10000000000000000000042, A10000000000000000000043, A10000000000000000000044, ); sourceTree = SOURCE_ROOT; };
-		A10000000000000000000041 /* Sources */ = {isa = PBXGroup; children = ( A10000000000000000000014, A10000000000000000000015, A10000000000000000000016, A10000000000000000000017, ); path = Sources; sourceTree = SOURCE_ROOT; };
-		A10000000000000000000042 /* Tools */ = {isa = PBXGroup; children = ( A10000000000000000000018, ); path = Tools; sourceTree = SOURCE_ROOT; };
-		A10000000000000000000043 /* Tests */ = {isa = PBXGroup; children = ( A10000000000000000000019, A1000000000000000000001A, ); path = Tests; sourceTree = SOURCE_ROOT; };
-		A10000000000000000000044 /* Experimental Extension */ = {isa = PBXGroup; children = ( A1000000000000000000001B, A1000000000000000000001C, A1000000000000000000001D, A1000000000000000000001E, A1000000000000000000001F, A10000000000000000000020, ); path = experimental/appex; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000040 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000041 /* Sources */,
+				A10000000000000000000042 /* Tools */,
+				A10000000000000000000043 /* Tests */,
+				A10000000000000000000044 /* experimental/appex */,
+			);
+			sourceTree = SOURCE_ROOT;
+		};
+		A10000000000000000000041 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000014 /* DitherConfiguration.swift */,
+				A10000000000000000000015 /* AnimationTiming.swift */,
+				A10000000000000000000016 /* DitherScreenSaverView.swift */,
+				A10000000000000000000017 /* DitherPreviewView.swift */,
+				A10000000000000000000021 /* VariableBlurView.swift */,
+			);
+			path = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		A10000000000000000000042 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000018 /* DitherRender.swift */,
+			);
+			path = Tools;
+			sourceTree = SOURCE_ROOT;
+		};
+		A10000000000000000000043 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000019 /* AnimationTimingCheck.swift */,
+				A1000000000000000000001A /* MetalLayerCheck.swift */,
+			);
+			path = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		A10000000000000000000044 /* experimental/appex */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000001B /* Settings.swift */,
+				A1000000000000000000001C /* DitherOptionsView.swift */,
+				A1000000000000000000001D /* ConfigurationViewController.swift */,
+				A1000000000000000000001E /* ViewController.swift */,
+				A1000000000000000000001F /* Extension.swift */,
+				A10000000000000000000020 /* HostMain.swift */,
+			);
+			path = experimental/appex;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
-/* Begin PBXNativeTarget section */
-		A10000000000000000000050 /* Dither */ = {isa = PBXAggregateTarget; buildConfigurationList = A10000000000000000000060 /* Build configuration list for PBXAggregateTarget "Dither" */; buildPhases = ( A10000000000000000000051, ); dependencies = ( ); name = Dither; productName = Dither; };
-/* End PBXNativeTarget section */
-
 /* Begin PBXProject section */
-		A10000000000000000000070 /* Project object */ = {isa = PBXProject; attributes = { LastUpgradeCheck = 1600; ORGANIZATIONNAME = Dither; TargetAttributes = { A10000000000000000000050 = { CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = A10000000000000000000071 /* Build configuration list for PBXProject "Dither" */; compatibilityVersion = "Xcode Default"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = ( en, ); mainGroup = A10000000000000000000040; productRefGroup = A10000000000000000000040; projectDirPath = ""; projectRoot = ""; targets = ( A10000000000000000000050, ); };
+		A10000000000000000000070 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2720;
+				ORGANIZATIONNAME = Dither;
+				TargetAttributes = {
+					A10000000000000000000050 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000071 /* Build configuration list for PBXProject "Dither" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A10000000000000000000040;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A10000000000000000000040;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000050 /* Dither */,
+			);
+		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		A10000000000000000000052 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ( ); runOnlyForDeploymentPostprocessing = 0; };
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXShellScriptBuildPhase section */
-		A10000000000000000000051 /* Build Dither extension */ = {isa = PBXShellScriptBuildPhase; buildActionMask = 2147483647; files = ( ); alwaysOutOfDate = 1; inputFileListPaths = ( ); inputPaths = ( "$(SRCROOT)/experimental/appex/build.sh", ); name = "Build Dither extension"; outputFileListPaths = ( ); outputPaths = ( "$(SRCROOT)/experimental/appex/build/DitherHost.app", ); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/zsh; shellScript = "\"${SRCROOT}/experimental/appex/build.sh\""; showEnvVarsInLog = 0; }; 
+		A10000000000000000000051 /* Build Dither extension */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/experimental/appex/build.sh",
+			);
+			name = "Build Dither extension";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/experimental/appex/build/DitherHost.app",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "\"${SRCROOT}/experimental/appex/build.sh\"";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		A10000000000000000000061 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { MACOSX_DEPLOYMENT_TARGET = 13.0; PRODUCT_NAME = Dither; }; name = Debug; };
-		A10000000000000000000062 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { MACOSX_DEPLOYMENT_TARGET = 13.0; PRODUCT_NAME = Dither; }; name = Release; };
-		A10000000000000000000072 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { MACOSX_DEPLOYMENT_TARGET = 13.0; }; name = Debug; };
-		A10000000000000000000073 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { MACOSX_DEPLOYMENT_TARGET = 13.0; }; name = Release; };
+		A10000000000000000000061 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = Dither;
+			};
+			name = Debug;
+		};
+		A10000000000000000000062 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = Dither;
+			};
+			name = Release;
+		};
+		A10000000000000000000072 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+			};
+			name = Debug;
+		};
+		A10000000000000000000073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A10000000000000000000060 /* Build configuration list for PBXAggregateTarget "Dither" */ = {isa = XCConfigurationList; buildConfigurations = ( A10000000000000000000061, A10000000000000000000062, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		A10000000000000000000071 /* Build configuration list for PBXProject "Dither" */ = {isa = XCConfigurationList; buildConfigurations = ( A10000000000000000000072, A10000000000000000000073, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A10000000000000000000060 /* Build configuration list for PBXAggregateTarget "Dither" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000061 /* Debug */,
+				A10000000000000000000062 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000071 /* Build configuration list for PBXProject "Dither" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000072 /* Debug */,
+				A10000000000000000000073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
 	rootObject = A10000000000000000000070 /* Project object */;

@@ -19,6 +19,7 @@ swiftc \
     "$ROOT/Sources/AnimationTiming.swift" \
     "$ROOT/Sources/DitherScreenSaverView.swift" \
     "$ROOT/Sources/DitherPreviewView.swift" \
+    "$ROOT/Sources/VariableBlurView.swift" \
     -o "$BUILD_DIR/Dither.o"
 
 SWIFT_LIB_DIR="$(dirname "$(xcrun --find swiftc)")/../lib/swift/macosx"

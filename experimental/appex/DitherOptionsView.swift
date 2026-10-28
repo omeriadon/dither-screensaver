@@ -284,6 +284,19 @@ struct DitherOptionsView: View {
     @ObservedObject var model: DitherOptionsModel
 
     var body: some View {
+        if #available(macOS 26, *) {
+            content
+                .safeAreaBar(edge: .top) { preview }
+                .safeAreaBar(edge: .bottom) { footer }
+                .scrollEdgeEffectStyle(.soft, for: .all)
+        } else {
+            content
+                .safeAreaInset(edge: .top) { preview }
+                .safeAreaInset(edge: .bottom) { footer }
+        }
+    }
+
+    private var content: some View {
         ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
@@ -299,24 +312,24 @@ struct DitherOptionsView: View {
                 proxy.scrollTo("top", anchor: .top)
             }
         }
-        .background(Color(nsColor: .windowBackgroundColor))
-        .safeAreaInset(edge: .top) {
-            DitherPreviewRepresentable(
-                configuration: model.configuration,
-                isActive: model.isPreviewActive
-            )
+    }
+
+    private var preview: some View {
+        DitherPreviewRepresentable(
+            configuration: model.configuration,
+            isActive: model.isPreviewActive
+        )
             .aspectRatio(DitherPreviewView.displayAspectRatio, contentMode: .fit)
             .frame(maxWidth: 460)
             .padding(.horizontal, 24)
             .padding(.top, 20)
             .padding(.bottom, 14)
-        }
-        .safeAreaInset(edge: .bottom) {
-            DitherFooter(model: model)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 18)
-                .background(.regularMaterial)
-        }
+    }
+
+    private var footer: some View {
+        DitherFooter(model: model)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 18)
     }
 }
 
