@@ -14,4 +14,14 @@ final class DitherScreenSaverViewController: ScreenSaverViewController {
         saver.autoresizingMask = [.width, .height]
         view = saver
     }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        (view as? DitherScreenSaverView)?.startAnimation()
+    }
+
+    override func viewDidDisappear() {
+        (view as? DitherScreenSaverView)?.stopAnimation()
+        super.viewDidDisappear()
+    }
 }

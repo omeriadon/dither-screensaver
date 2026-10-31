@@ -23,6 +23,7 @@
 /* Begin PBXFileReference section */
 		A10000000000000000000014 /* DitherConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherConfiguration.swift; sourceTree = "<group>"; };
 		A10000000000000000000015 /* AnimationTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationTiming.swift; sourceTree = "<group>"; };
+		A10000000000000000000022 /* DitherMetalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherMetalRenderer.swift; sourceTree = "<group>"; };
 		A10000000000000000000016 /* DitherScreenSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherScreenSaverView.swift; sourceTree = "<group>"; };
 		A10000000000000000000017 /* DitherPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DitherPreviewView.swift; sourceTree = "<group>"; };
 		A10000000000000000000021 /* VariableBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableBlurView.swift; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 			children = (
 				A10000000000000000000014 /* DitherConfiguration.swift */,
 				A10000000000000000000015 /* AnimationTiming.swift */,
+				A10000000000000000000022 /* DitherMetalRenderer.swift */,
 				A10000000000000000000016 /* DitherScreenSaverView.swift */,
 				A10000000000000000000017 /* DitherPreviewView.swift */,
 				A10000000000000000000021 /* VariableBlurView.swift */,

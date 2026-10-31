@@ -13,18 +13,21 @@ swiftc \
     -parse-as-library \
     -emit-object \
     -whole-module-optimization \
+    -O \
+    -lto=llvm-full \
     -target "$(uname -m)-apple-macos13.0" \
     -module-name Dither \
     "$ROOT/Sources/DitherConfiguration.swift" \
     "$ROOT/Sources/AnimationTiming.swift" \
+    "$ROOT/Sources/DitherMetalRenderer.swift" \
     "$ROOT/Sources/DitherScreenSaverView.swift" \
     "$ROOT/Sources/DitherPreviewView.swift" \
     "$ROOT/Sources/VariableBlurView.swift" \
     -o "$BUILD_DIR/Dither.o"
 
 SWIFT_LIB_DIR="$(dirname "$(xcrun --find swiftc)")/../lib/swift/macosx"
-clang -bundle "$BUILD_DIR/Dither.o" \
-    -framework AppKit -framework ScreenSaver \
+clang -flto=full -bundle "$BUILD_DIR/Dither.o" \
+    -framework AppKit -framework ScreenSaver -framework Metal -framework MetalPerformanceShaders \
     -L "$SWIFT_LIB_DIR" -Wl,-rpath,/usr/lib/swift \
     -o "$BUNDLE/Contents/MacOS/Dither"
 rm "$BUILD_DIR/Dither.o"

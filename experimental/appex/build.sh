@@ -23,14 +23,18 @@ TARGET="$(uname -m)-apple-macos13.0"
 
 swiftc \
     -parse-as-library \
+    -O \
+    -lto=llvm-full \
     -target "$TARGET" \
     "$PROJECT_ROOT/Sources/DitherConfiguration.swift" \
     "$PROJECT_ROOT/Sources/AnimationTiming.swift" \
+    "$PROJECT_ROOT/Sources/DitherMetalRenderer.swift" \
     "$PROJECT_ROOT/Sources/DitherScreenSaverView.swift" \
     "$PROJECT_ROOT/Tools/DitherRender.swift" \
     -framework AppKit \
     -framework ScreenSaver \
     -framework Metal \
+    -framework MetalPerformanceShaders \
     -framework CoreGraphics \
     -framework ImageIO \
     -o "$BUILD_DIR/DitherRender"
@@ -60,12 +64,15 @@ swiftc \
     -parse-as-library \
     -emit-object \
     -whole-module-optimization \
+    -O \
+    -lto=llvm-full \
     -D DITHER_APPEX \
     -target "$TARGET" \
     -module-name DitherExtension \
     -import-objc-header "$ROOT/ScreenSaverPrivate.h" \
     "$PROJECT_ROOT/Sources/DitherConfiguration.swift" \
     "$PROJECT_ROOT/Sources/AnimationTiming.swift" \
+    "$PROJECT_ROOT/Sources/DitherMetalRenderer.swift" \
     "$PROJECT_ROOT/Sources/DitherScreenSaverView.swift" \
     "$PROJECT_ROOT/Sources/DitherPreviewView.swift" \
     "$PROJECT_ROOT/Sources/VariableBlurView.swift" \
@@ -75,9 +82,11 @@ swiftc \
     "$ROOT/DitherOptionsView.swift" \
     "$ROOT/ConfigurationViewController.swift" \
     -framework SwiftUI \
+    -framework Metal \
+    -framework MetalPerformanceShaders \
     -o "$BUILD_DIR/Extension.o"
 
-clang -Wl,-e,_NSExtensionMain \
+clang -flto=full -Wl,-e,_NSExtensionMain \
     -isysroot "$SDKROOT" \
     -target "$TARGET" \
     "$BUILD_DIR/Extension.o" \
@@ -89,6 +98,8 @@ clang -Wl,-e,_NSExtensionMain \
 
 swiftc \
     -parse-as-library \
+    -O \
+    -lto=llvm-full \
     -target "$TARGET" \
     "$ROOT/HostMain.swift" \
     -framework AppKit \

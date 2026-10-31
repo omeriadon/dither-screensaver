@@ -12,12 +12,13 @@ final class DitherSettings: NSObject {
     private var observing = false
 
     private let defaultsValues: [String: Any] = [
-        "waveSpeed": 0.05, "waveFrequency": 3.0, "waveAmplitude": 0.3,
+        "waveSpeed": 0.05, "waveDirection": Double(DitherConfiguration.defaultWaveDirection), "waveFrequency": 3.0, "waveAmplitude": 0.3,
         "waveColor": "#808080", "backgroundColor": "#000000", "colorNum": 4.0,
-        "pixelSize": 2.0, "disableAnimation": false, "ditherMode": 0,
+        "pixelSize": 2.0, "disableAnimation": false, "ditherMode": 0, "ditherStrength": 1.0,
         "palette": "", "scale": 1.0, "contrast": 1.0, "brightness": 0.0,
         "intro": true, "transparent": false, "dpr": 0.0, "gap": 0.0,
-        "cornerRadius": 0.0, "backgroundStyle": "custom"
+        "cornerRadius": 0.0, "joinAdjacentSquares": false, "backgroundStyle": "custom", "colorPlacement": "squares",
+        "squareStyle": "white"
     ]
 
     init(defaults: UserDefaults? = nil) {
@@ -40,7 +41,19 @@ final class DitherSettings: NSObject {
 
     var configuration: DitherConfiguration {
         var result = DitherConfiguration()
-        result.waveSpeed = number(for: "waveSpeed", fallback: result.waveSpeed)
+        let storedWaveSpeed = number(for: "waveSpeed", fallback: result.waveSpeed)
+        let storedWaveDirection = number(for: "waveDirection", fallback: result.waveDirection)
+        if storedWaveSpeed < 0 {
+            result.waveSpeed = abs(storedWaveSpeed)
+            result.waveDirection = DitherConfiguration.normalizedWaveDirection(storedWaveDirection + 180)
+                ?? result.waveDirection
+            defaults.set(result.waveSpeed, forKey: "waveSpeed")
+            defaults.set(result.waveDirection, forKey: "waveDirection")
+        } else {
+            result.waveSpeed = storedWaveSpeed
+            result.waveDirection = DitherConfiguration.normalizedWaveDirection(storedWaveDirection)
+                ?? result.waveDirection
+        }
         result.waveFrequency = max(0.01, number(for: "waveFrequency", fallback: result.waveFrequency))
         result.waveAmplitude = max(0, number(for: "waveAmplitude", fallback: result.waveAmplitude))
         result.waveColor = color(defaults.string(forKey: "waveColor"), fallback: result.waveColor)
@@ -55,24 +68,33 @@ final class DitherSettings: NSObject {
         default:
             break
         }
-        if result.waveColor == .zero {
-            result.backgroundColor = SIMD3<Float>(repeating: 1)
+        if defaults.string(forKey: "colorPlacement") == "background" {
+            result.backgroundColor = result.waveColor
+            result.waveColor = defaults.string(forKey: "squareStyle") == "black"
+                ? .zero
+                : SIMD3<Float>(repeating: 1)
         }
         result.colorNum = max(2, number(for: "colorNum", fallback: result.colorNum))
         result.pixelSize = min(4096, max(1, number(for: "pixelSize", fallback: result.pixelSize)))
         result.disableAnimation = defaults.bool(forKey: "disableAnimation")
         result.ditherMode = min(7, max(0, defaults.integer(forKey: "ditherMode")))
+        result.ditherStrength = min(1, max(0, number(for: "ditherStrength", fallback: result.ditherStrength)))
         result.palette = defaults.string(forKey: "palette")?
             .split(separator: ",")
             .compactMap { paletteColor(String($0).trimmingCharacters(in: .whitespaces)) } ?? []
+        if defaults.string(forKey: "colorPlacement") == "background" {
+            result.palette = []
+        }
         result.scale = max(0.05, number(for: "scale", fallback: result.scale))
         result.contrast = number(for: "contrast", fallback: result.contrast)
         result.brightness = number(for: "brightness", fallback: result.brightness)
         result.intro = defaults.bool(forKey: "intro")
         result.transparent = false
-        result.dpr = min(2, max(0, number(for: "dpr", fallback: result.dpr)))
+        // Ignore the legacy render-scale override; always use the display backing scale.
+        result.dpr = 0
         result.gap = min(0.45, max(0, number(for: "gap", fallback: result.gap)))
         result.cornerRadius = min(0.5, max(0, number(for: "cornerRadius", fallback: result.cornerRadius)))
+        result.joinAdjacentSquares = defaults.bool(forKey: "joinAdjacentSquares")
         return result
     }
 
@@ -91,7 +113,13 @@ final class DitherSettings: NSObject {
             guard let number = Double(text), number.isFinite else {
                 return
             }
-            defaults.set(number, forKey: key)
+            if key == "waveDirection" {
+                let direction = DitherConfiguration.normalizedWaveDirection(Float(number))
+                    ?? DitherConfiguration.defaultWaveDirection
+                defaults.set(Double(direction), forKey: key)
+            } else {
+                defaults.set(number, forKey: key)
+            }
         } else {
             defaults.set(value, forKey: key)
         }
